@@ -50,6 +50,10 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-vis
   <div class="chips" id="quickFilters">
     <button class="chip active" data-status="active">Open wishes</button><button class="chip" data-status="all">Everything</button><button class="chip" data-status="overdue">Overdue</button><button class="chip" data-status="no-date">No deadline</button>
   </div>
+  <div style="font-size:12px;font-weight:750;color:var(--muted);margin:2px 0 7px">View by time period ✧</div>
+  <div class="chips" id="periodFilters">
+    <button class="chip active" data-period="all">Any time</button><button class="chip" data-period="30">1 month</button><button class="chip" data-period="60">2 months</button><button class="chip" data-period="90">3 months</button><button class="chip" data-period="180">6 months</button><button class="chip" data-period="365">1 year</button>
+  </div>
   <div class="list" id="goalList"></div>
   <button class="completed-toggle" id="completedToggle"><span>♡ Completed wishes</span><span id="completedLabel">0 · Show ▾</span></button>
   <div class="completed-list" id="completedList"></div>
@@ -77,7 +81,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-vis
      <div class="field"><label for="goalPriority">Priority</label><select id="goalPriority"><option value="high">♡ High</option><option value="medium" selected>✧ Medium</option><option value="low">○ Low / someday</option></select></div>
     </div>
     <div class="two">
-     <div class="field"><label for="goalDeadline">Target date</label><input id="goalDeadline" type="date"></div>
+     <div class="field"><label for="goalDeadline">Deadline / achievement date</label><input id="goalDeadline" type="date"></div>
      <div class="field"><label for="goalStatus">Status</label><select id="goalStatus"><option value="open">Not started</option><option value="progress">In progress</option><option value="done">Completed</option></select></div>
     </div>
    </div>
@@ -91,7 +95,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-vis
  const STORE='littleWishes_v1';
  const DEFAULT_CATS=['Personal growth','Study & languages','Career','Travel & experiences','Health & fitness','Things to buy','Someday'];
  const $=id=>document.getElementById(id);
- let state=loadState(), currentStatus='active', completedOpen=false, currentView='active', toastTimer;
+ let state=loadState(), currentStatus='active', completedOpen=false, currentView='active', currentPeriod='all', toastTimer;
  function loadState(){try{const v=JSON.parse(localStorage.getItem(STORE));if(v&&Array.isArray(v.goals)&&Array.isArray(v.categories))return v}catch(e){}return {categories:DEFAULT_CATS,goals:[]}}
  function save(){try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){showToast('Could not save — export a backup first.')} }
  function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -114,6 +118,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-vis
    if(currentStatus==='overdue')arr=arr.filter(g=>g.deadline&&daysTo(g.deadline)<0);
    if(currentStatus==='no-date')arr=arr.filter(g=>!g.deadline);
    if(currentView==='upcoming')arr=arr.filter(g=>g.deadline&&daysTo(g.deadline)>=0&&daysTo(g.deadline)<=30);
+   if(currentPeriod!=='all')arr=arr.filter(g=>g.deadline&&daysTo(g.deadline)>=0&&daysTo(g.deadline)<=Number(currentPeriod));
    if(currentView==='all'){} 
   }
   const sort=$('sortSelect').value;
@@ -122,7 +127,8 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-vis
  }
  function card(g,done=false){
   const n=daysTo(g.deadline);let deadlineTag='';
-  if(g.deadline&&!done){if(n<0)deadlineTag=`<span class="tag overdue">${Math.abs(n)}d overdue</span>`;else if(n<=7)deadlineTag=`<span class="tag soon">${n===0?'Due today':n===1?'Due tomorrow':`Due in ${n} days`}</span>`}
+  // Always show a countdown for active wishes with a target date, not only when the date is near.
+  if(g.deadline&&!done){if(n<0)deadlineTag=`<span class="tag overdue">${Math.abs(n)} days overdue</span>`;else if(n===0)deadlineTag=`<span class="tag soon">Target day is today ✿</span>`;else deadlineTag=`<span class="tag soon">${n} days to go</span>`}
   return `<article class="goal ${done?'done':''}" data-id="${g.id}">
    <input class="check" type="checkbox" aria-label="${done?'Mark incomplete':'Mark completed'}: ${esc(g.title)}" data-complete="${g.id}" ${done?'checked':''}>
    <div class="goal-main"><div class="goal-title">${esc(g.title)}</div>${g.note?`<div class="goal-note">${esc(g.note)}</div>`:''}
@@ -135,12 +141,13 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-vis
   refreshSelects();
   const total=state.goals.length,done=state.goals.filter(g=>g.status==='done').length,active=total-done,pct=total?Math.round(done/total*100):0;
   $('totalCount').textContent=total;$('activeCount').textContent=active;$('doneCount').textContent=done;$('progressText').textContent=pct+'% complete';$('progressFill').style.width=pct+'%';
-  $('listHeading').textContent=currentView==='upcoming'?'Coming up in 30 days':currentView==='all'?'All your wishes':'Your wishes';
+  $('listHeading').textContent=currentPeriod!=='all'?`Wishes in the next ${currentPeriod==='30'?'month':currentPeriod==='60'?'2 months':currentPeriod==='90'?'3 months':currentPeriod==='180'?'6 months':'year'}`:currentView==='upcoming'?'Coming up in 30 days':currentView==='all'?'All your wishes':'Your wishes';
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===currentView));
   const arr=filteredGoals(false);$('goalList').innerHTML=arr.map(g=>card(g)).join('');
-  if(!arr.length){let message=currentStatus==='overdue'?'Nothing overdue. Keep that lovely momentum!':currentStatus==='no-date'?'All caught up on dated wishes.':currentView==='upcoming'?'No deadlines in the next 30 days. Room to breathe!':'No wishes here yet — add a little dream to get started.';$('goalList').innerHTML=`<div class="empty"><div class="flower">🌷</div><strong>${currentStatus==='overdue'?'You’re all caught up!':'A little space for a new dream'}</strong>${esc(message)}</div>`}
+  if(!arr.length){let message=currentStatus==='overdue'?'Nothing overdue. Keep that lovely momentum!':currentStatus==='no-date'?'All caught up on dated wishes.':currentPeriod!=='all'?'No upcoming deadlines in this time period yet. Room to dream!':currentView==='upcoming'?'No deadlines in the next 30 days. Room to breathe!':'No wishes here yet — add a little dream to get started.';$('goalList').innerHTML=`<div class="empty"><div class="flower">🌷</div><strong>${currentStatus==='overdue'?'You’re all caught up!':'A little space for a new dream'}</strong>${esc(message)}</div>`}
   const finished=filteredGoals(true);$('completedLabel').textContent=`${finished.length} · ${completedOpen?'Hide ▴':'Show ▾'}`;$('completedList').classList.toggle('open',completedOpen);$('completedList').innerHTML=finished.map(g=>card(g,true)).join('')||(completedOpen?'<div class="empty"><div class="flower">♡</div>No completed wishes just yet.</div>':'');
-  document.querySelectorAll('.chip').forEach(b=>b.classList.toggle('active',b.dataset.status===currentStatus));
+  document.querySelectorAll('#quickFilters .chip').forEach(b=>b.classList.toggle('active',b.dataset.status===currentStatus));
+  document.querySelectorAll('#periodFilters .chip').forEach(b=>b.classList.toggle('active',b.dataset.period===currentPeriod));
  }
  function showToast(s){const t=$('toast');t.textContent=s;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2300)}
  function openModal(g=null){$('goalForm').reset();$('goalId').value=g?g.id:'';$('modalTitle').textContent=g?'Edit your wish ✿':'Add a little wish ✿';refreshSelects();if(g){$('goalTitle').value=g.title;$('goalNote').value=g.note||'';$('goalCategory').value=g.category;$('goalPriority').value=g.priority;$('goalDeadline').value=g.deadline||'';$('goalStatus').value=g.status}else{$('goalPriority').value='medium';$('goalStatus').value='open'}$('modalBackdrop').classList.add('show');setTimeout(()=>$('goalTitle').focus(),100)}
@@ -152,10 +159,11 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-vis
  $('goalForm').addEventListener('submit',e=>{e.preventDefault();const id=$('goalId').value,old=getGoal(id),status=$('goalStatus').value;const g={id:id||String(Date.now())+'-'+Math.random().toString(36).slice(2,7),title:$('goalTitle').value.trim(),note:$('goalNote').value.trim(),category:$('goalCategory').value||state.categories[0],priority:$('goalPriority').value,deadline:$('goalDeadline').value,status,created:old?.created||Date.now(),completedAt:status==='done'?(old?.status==='done'?old.completedAt:new Date().toISOString().slice(0,10)):''};if(!g.title)return;if(old)state.goals=state.goals.map(x=>x.id===id?g:x);else state.goals.push(g);save();closeModal();render();showToast(old?'Wish updated ♡':'Wish saved ♡')});
  document.addEventListener('change',e=>{const id=e.target.dataset.complete;if(!id)return;const g=getGoal(id);if(!g)return;if(e.target.checked){g.status='done';g.completedAt=new Date().toISOString().slice(0,10);completedOpen=true;showToast('One little dream achieved! ✿')}else{g.status='open';g.completedAt='';showToast('Moved back to your wishes')}save();render()});
  document.addEventListener('click',e=>{const edit=e.target.closest('[data-edit]');if(edit){const g=getGoal(edit.dataset.edit);if(g)openModal(g);return}const del=e.target.closest('[data-delete]');if(del){const g=getGoal(del.dataset.delete);if(g&&confirm(`Delete “${g.title}”? This cannot be undone.`)){state.goals=state.goals.filter(x=>x.id!==g.id);save();render();showToast('Wish deleted')}return}const rem=e.target.closest('[data-remove-cat]');if(rem){const cat=rem.dataset.removeCat;if(state.categories.length<=1){showToast('Keep at least one category ♡');return}if(confirm(`Remove category “${cat}”? Existing wishes will move to “${state.categories.find(c=>c!==cat)}”.`)){const replacement=state.categories.find(c=>c!==cat);state.goals.forEach(g=>{if(g.category===cat)g.category=replacement});state.categories=state.categories.filter(c=>c!==cat);save();render()}return}});
- document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{currentStatus=b.dataset.status;currentView='all';render()}));
+ document.querySelectorAll('#quickFilters .chip').forEach(b=>b.addEventListener('click',()=>{currentStatus=b.dataset.status;currentView='all';render()}));
+ document.querySelectorAll('#periodFilters .chip').forEach(b=>b.addEventListener('click',()=>{currentPeriod=b.dataset.period;currentView='all';currentStatus='active';render()}));
  ['searchInput','categoryFilter','priorityFilter','sortSelect'].forEach(id=>$(id).addEventListener(id==='searchInput'?'input':'change',render));
  $('completedToggle').addEventListener('click',()=>{completedOpen=!completedOpen;render()});
- document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>{currentView=b.dataset.view;currentStatus='active';render()}));
+ document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>{currentView=b.dataset.view;currentStatus='active';currentPeriod='all';render()}));
  $('settingsBtn').addEventListener('click',()=>{$('settingsPanel').classList.toggle('show');if($('settingsPanel').classList.contains('show'))$('settingsPanel').scrollIntoView({behavior:'smooth',block:'nearest'})});
  $('addCategoryBtn').addEventListener('click',()=>{const inp=$('newCategory'),v=inp.value.trim();if(!v)return;if(state.categories.some(c=>c.toLowerCase()===v.toLowerCase())){showToast('That category already exists');return}if(v.length>32){showToast('Keep category names under 33 characters');return}state.categories.push(v);inp.value='';save();render();showToast('New category added ♡')});
  $('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='little-wishes-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(url);showToast('Backup exported')});
