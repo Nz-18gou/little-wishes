@@ -1,0 +1,13 @@
+{
+  "name": "Little Wishes — Goal & Wishlist Manager",
+  "short_name": "Little Wishes",
+  "description": "A soft, personal space for goals, deadlines, priorities, and little wins.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fff9fc",
+  "theme_color": "#fff7fb",
+  "icons": [
+    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}

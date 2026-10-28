@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff7fb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Little Wishes">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Little Wishes ✿</title>
+<style>
+:root{--bg:#fff9fc;--paper:#fff;--ink:#453d49;--muted:#958a99;--pink:#f6cddd;--pink2:#fff0f6;--lav:#e8e1fb;--mint:#dff3e9;--peach:#ffe8d9;--line:#f0e7ed;--shadow:0 8px 28px rgba(105,74,98,.07);--accent:#c76b94}
+*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;background:linear-gradient(180deg,#fff7fb 0,#fffaf8 40%,#fff9fc 100%);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #e9b6cf;outline-offset:2px}
+.wrap{max-width:900px;margin:0 auto;padding:22px 16px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}.brand{display:flex;align-items:center;gap:10px}.logo{display:grid;place-items:center;width:44px;height:44px;border-radius:16px;background:var(--pink2);font-size:25px}.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}.brand h1{font-size:23px;line-height:1.1;margin:3px 0 0;letter-spacing:-.04em}.icon-btn{border:1px solid var(--line);background:#fff;border-radius:14px;width:42px;height:42px;color:var(--ink);font-size:18px;box-shadow:0 3px 10px #5a38500a}
+.hero{background:linear-gradient(120deg,#ffeaf3,#f7efff 65%,#eef9f3);border-radius:25px;padding:22px 20px;margin-bottom:16px;position:relative;overflow:hidden}.hero:after{content:"✿";position:absolute;right:12px;top:-21px;font-size:100px;color:#fff9;transform:rotate(15deg)}.hero h2{font-size:24px;letter-spacing:-.04em;margin:4px 0 6px;position:relative;z-index:1}.hero p{margin:0;color:#776b7a;font-size:13px;max-width:270px;position:relative;z-index:1}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 20px}.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px 12px;box-shadow:var(--shadow)}.stat .n{font-size:23px;font-weight:800;letter-spacing:-.04em}.stat .label{font-size:11px;color:var(--muted);margin-top:2px}
+.progress-wrap{margin-top:13px;max-width:280px}.progress-head{display:flex;justify-content:space-between;font-size:11px;color:#786b7c;margin-bottom:6px}.track{height:7px;border-radius:9px;background:#ffffffb8;overflow:hidden}.fill{height:100%;border-radius:9px;background:linear-gradient(90deg,#e8a9c5,#c6b5f0);width:0;transition:width .25s}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:20px 2px 11px}.section-head h2{font-size:17px;margin:0;letter-spacing:-.02em}.small-muted{font-size:12px;color:var(--muted)}
+.primary{border:0;background:#c66e98;color:#fff;border-radius:15px;padding:11px 15px;font-weight:700;box-shadow:0 5px 14px #c66e982b}.primary:active{transform:translateY(1px)}.secondary{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:13px;padding:9px 12px}.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.filters select,.search{min-width:0;width:100%;border:1px solid var(--line);border-radius:13px;background:#fff;padding:11px 12px;color:var(--ink)}.search-row{margin-bottom:9px}.chips{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.chip{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 12px;color:#857787;font-size:12px}.chip.active{background:#fbe5ef;border-color:#f3c7da;color:#9d4e74;font-weight:700}
+.list{display:grid;gap:10px}.goal{background:#fff;border:1px solid var(--line);border-radius:19px;padding:14px;box-shadow:var(--shadow);display:grid;grid-template-columns:27px 1fr auto;gap:10px;align-items:start}.check{appearance:none;width:23px;height:23px;border:1.7px solid #e3c9d7;border-radius:8px;margin:2px 0 0;background:#fff;display:grid;place-items:center}.check:checked{background:#d5eddf;border-color:#9bcdb0}.check:checked:after{content:"✓";font-size:15px;color:#487b5d;font-weight:800}.goal-main{min-width:0}.goal-title{font-weight:750;font-size:15px;overflow-wrap:anywhere}.goal-note{font-size:12px;color:var(--muted);margin-top:4px;white-space:pre-wrap;overflow-wrap:anywhere}.goal.done .goal-title{text-decoration:line-through;color:#a99eaa}.goal.done{background:#fffdfd;box-shadow:none;opacity:.8}.meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.tag{font-size:10px;font-weight:700;border-radius:99px;padding:4px 8px;background:#f6f1f6;color:#857788}.tag.p-high{background:#ffe6e6;color:#b45b65}.tag.p-medium{background:#fff0d9;color:#9c743d}.tag.p-low{background:#e8f5eb;color:#588366}.tag.overdue{background:#ffe4e3;color:#b64b50}.tag.soon{background:#fff0d9;color:#9c743d}.date{font-size:11px;color:#8c7f90;margin-top:8px}.goal-actions{display:flex;gap:4px}.mini-btn{border:0;background:transparent;color:#a194a3;padding:3px 4px;font-size:16px;border-radius:8px}.mini-btn:hover{background:#f8f0f5}.empty{border:1px dashed #e8d6e1;border-radius:20px;padding:28px 16px;text-align:center;background:#fff9fc;color:var(--muted)}.empty .flower{font-size:30px;margin-bottom:7px}.empty strong{display:block;color:var(--ink);margin-bottom:3px}.completed-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;background:transparent;border:0;padding:15px 2px;color:#8c7e90;font-weight:700}.completed-toggle span:last-child{font-size:12px}.completed-list{display:none}.completed-list.open{display:grid;gap:9px}.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:5;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:#fffdfcf2;backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;justify-content:center}.nav-inner{width:100%;max-width:600px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.nav-item{border:0;background:transparent;color:#a294a5;padding:5px 4px;font-size:10px;display:grid;justify-items:center;gap:3px}.nav-item b{font-size:19px;font-weight:500}.nav-item.active{color:#b95d89}.modal-backdrop{display:none;position:fixed;inset:0;background:#39263866;z-index:10;align-items:flex-end;justify-content:center;padding:0}.modal-backdrop.show{display:flex}.modal{width:100%;max-width:600px;max-height:92vh;overflow:auto;background:#fffafc;border-radius:25px 25px 0 0;padding:22px 18px calc(24px + env(safe-area-inset-bottom));box-shadow:0 -10px 40px #37213520}.modal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.modal h2{font-size:21px;margin:0}.form-grid{display:grid;gap:13px}.field label{display:block;font-size:12px;font-weight:750;color:#786c7e;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #ebdfe7;background:#fff;border-radius:13px;padding:12px;color:var(--ink)}.field textarea{resize:vertical;min-height:72px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-actions{display:flex;gap:8px;margin-top:18px}.form-actions button{flex:1}.category-manage{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.cat-pill{display:flex;align-items:center;gap:5px;background:#f6edf3;border-radius:99px;padding:6px 9px;font-size:12px}.cat-pill button{border:0;background:transparent;color:#a45b7e;padding:0 2px}.toast{position:fixed;bottom:calc(86px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#4d3d4e;color:#fff;border-radius:99px;padding:10px 16px;font-size:12px;z-index:20;display:none;box-shadow:var(--shadow);white-space:nowrap}.toast.show{display:block}.settings-panel{display:none;background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;margin:12px 0}.settings-panel.show{display:block}.setting-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.setting-row input{flex:1;min-width:140px;border:1px solid var(--line);border-radius:11px;padding:10px}.tiny{font-size:11px;color:var(--muted);line-height:1.5}
+@media(min-width:650px){.wrap{padding:32px 24px}.hero{padding:28px}.hero h2{font-size:29px}.goal{padding:17px}.modal-backdrop{align-items:center;padding:20px}.modal{border-radius:25px;padding:25px;max-height:88vh}.filters{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo">✿</div><div><div class="eyebrow">A little space for big dreams</div><h1>Little Wishes</h1></div></div>
+    <button class="icon-btn" id="settingsBtn" aria-label="Settings">⚙</button>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">Your life, your pace</div>
+    <h2>Dream it. Plan it. Do it. ♡</h2>
+    <p>Every little step counts. Keep the things you want close, and let your priorities guide you.</p>
+    <div class="progress-wrap"><div class="progress-head"><span>Little by little</span><strong id="progressText">0% complete</strong></div><div class="track"><div class="fill" id="progressFill"></div></div></div>
+  </section>
+  <section class="stats">
+    <div class="stat"><div class="n" id="totalCount">0</div><div class="label">♡ All wishes</div></div>
+    <div class="stat"><div class="n" id="activeCount">0</div><div class="label">✧ In progress</div></div>
+    <div class="stat"><div class="n" id="doneCount">0</div><div class="label">✿ Completed</div></div>
+  </section>
+  <div class="section-head"><h2 id="listHeading">Your wishes</h2><button class="primary" id="addBtn">＋ Add wish</button></div>
+  <div class="search-row"><input id="searchInput" class="search" placeholder="⌕  Search your wishes..." aria-label="Search wishes"></div>
+  <div class="filters">
+    <select id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option></select>
+    <select id="priorityFilter" aria-label="Filter by priority"><option value="all">All priorities</option><option value="high">♡ High priority</option><option value="medium">✧ Medium priority</option><option value="low">○ Low priority</option></select>
+    <select id="sortSelect" aria-label="Sort wishes"><option value="priority">Sort: Priority</option><option value="deadline">Sort: Deadline</option><option value="created">Sort: Recently added</option><option value="title">Sort: A–Z</option></select>
+  </div>
+  <div class="chips" id="quickFilters">
+    <button class="chip active" data-status="active">Open wishes</button><button class="chip" data-status="all">Everything</button><button class="chip" data-status="overdue">Overdue</button><button class="chip" data-status="no-date">No deadline</button>
+  </div>
+  <div class="list" id="goalList"></div>
+  <button class="completed-toggle" id="completedToggle"><span>♡ Completed wishes</span><span id="completedLabel">0 · Show ▾</span></button>
+  <div class="completed-list" id="completedList"></div>
+  <div class="settings-panel" id="settingsPanel">
+    <div class="section-head" style="margin-top:0"><h2>Little settings</h2><span class="small-muted">Your data stays on this device</span></div>
+    <div class="field"><label for="newCategory">Add your own category</label><div class="setting-row"><input id="newCategory" placeholder="e.g. New experiences"><button class="secondary" id="addCategoryBtn">Add category</button></div><div class="category-manage" id="categoryManage"></div></div>
+    <div class="section-head"><h2>Backup your wishes</h2></div>
+    <p class="tiny">Your wishes are saved in this browser. Export a backup now and then, especially before changing phones or clearing browser data.</p>
+    <div class="setting-row"><button class="secondary" id="exportBtn">↧ Export backup</button><label class="secondary" style="cursor:pointer">↥ Import backup<input id="importInput" type="file" accept="application/json,.json" hidden></label></div>
+    <p class="tiny" style="margin-top:12px">Tip: On iPhone, open this app in Safari, tap Share, then “Add to Home Screen”. For offline launch, host the included files on HTTPS (for example, GitHub Pages).</p>
+  </div>
+</div>
+<nav class="bottom-nav"><div class="nav-inner"><button class="nav-item active" data-view="active"><b>♡</b>My wishes</button><button class="nav-item" data-view="upcoming"><b>☼</b>Coming up</button><button class="nav-item" data-view="all"><b>✿</b>All goals</button></div></nav>
+
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+ <div class="modal">
+  <div class="modal-top"><h2 id="modalTitle">Add a little wish ✿</h2><button class="icon-btn" id="closeModal" aria-label="Close">×</button></div>
+  <form id="goalForm">
+   <input type="hidden" id="goalId">
+   <div class="form-grid">
+    <div class="field"><label for="goalTitle">What do you want to do? *</label><input id="goalTitle" required maxlength="120" placeholder="e.g. Spend a month in Thailand"></div>
+    <div class="field"><label for="goalNote">A note to future me (optional)</label><textarea id="goalNote" maxlength="600" placeholder="Why is this important? What's the first step?"></textarea></div>
+    <div class="two">
+     <div class="field"><label for="goalCategory">Category</label><select id="goalCategory"></select></div>
+     <div class="field"><label for="goalPriority">Priority</label><select id="goalPriority"><option value="high">♡ High</option><option value="medium" selected>✧ Medium</option><option value="low">○ Low / someday</option></select></div>
+    </div>
+    <div class="two">
+     <div class="field"><label for="goalDeadline">Target date</label><input id="goalDeadline" type="date"></div>
+     <div class="field"><label for="goalStatus">Status</label><select id="goalStatus"><option value="open">Not started</option><option value="progress">In progress</option><option value="done">Completed</option></select></div>
+    </div>
+   </div>
+   <div class="form-actions"><button type="button" class="secondary" id="cancelModal">Cancel</button><button type="submit" class="primary">Save wish ♡</button></div>
+  </form>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+(() => {
+ const STORE='littleWishes_v1';
+ const DEFAULT_CATS=['Personal growth','Study & languages','Career','Travel & experiences','Health & fitness','Things to buy','Someday'];
+ const $=id=>document.getElementById(id);
+ let state=loadState(), currentStatus='active', completedOpen=false, currentView='active', toastTimer;
+ function loadState(){try{const v=JSON.parse(localStorage.getItem(STORE));if(v&&Array.isArray(v.goals)&&Array.isArray(v.categories))return v}catch(e){}return {categories:DEFAULT_CATS,goals:[]}}
+ function save(){try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){showToast('Could not save — export a backup first.')} }
+ function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ function dateLabel(d){if(!d)return 'No target date';let dt=new Date(d+'T12:00:00');return dt.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'})}
+ function daysTo(d){if(!d)return null;const now=new Date();now.setHours(0,0,0,0);return Math.round((new Date(d+'T00:00:00')-now)/86400000)}
+ function priorityLabel(p){return p==='high'?'♡ High priority':p==='medium'?'✧ Medium priority':'○ Someday'}
+ function priorityRank(p){return ({high:0,medium:1,low:2})[p]??3}
+ function statusLabel(s){return s==='progress'?'In progress':'Not started'}
+ function refreshSelects(){
+  const f=$('categoryFilter'), old=f.value;f.innerHTML='<option value="all">All categories</option>'+state.categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');if([...f.options].some(o=>o.value===old))f.value=old;
+  const g=$('goalCategory'), prev=g.value;g.innerHTML=state.categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');if([...g.options].some(o=>o.value===prev))g.value=prev;
+  $('categoryManage').innerHTML=state.categories.map(c=>`<span class="cat-pill">${esc(c)} <button type="button" data-remove-cat="${esc(c)}" aria-label="Remove ${esc(c)}">×</button></span>`).join('');
+ }
+ function filteredGoals(done=false){
+  let arr=state.goals.filter(g=>(g.status==='done')===done);
+  if(!done){
+   const q=$('searchInput').value.trim().toLowerCase(),cat=$('categoryFilter').value,pri=$('priorityFilter').value;
+   arr=arr.filter(g=>(!q||(g.title+' '+g.note+' '+g.category).toLowerCase().includes(q))&&(cat==='all'||g.category===cat)&&(pri==='all'||g.priority===pri));
+   if(currentStatus==='active')arr=arr.filter(g=>g.status!=='done');
+   if(currentStatus==='overdue')arr=arr.filter(g=>g.deadline&&daysTo(g.deadline)<0);
+   if(currentStatus==='no-date')arr=arr.filter(g=>!g.deadline);
+   if(currentView==='upcoming')arr=arr.filter(g=>g.deadline&&daysTo(g.deadline)>=0&&daysTo(g.deadline)<=30);
+   if(currentView==='all'){} 
+  }
+  const sort=$('sortSelect').value;
+  arr.sort((a,b)=>{if(sort==='priority')return priorityRank(a.priority)-priorityRank(b.priority)||((a.deadline||'9999').localeCompare(b.deadline||'9999'));if(sort==='deadline')return (a.deadline||'9999').localeCompare(b.deadline||'9999')||priorityRank(a.priority)-priorityRank(b.priority);if(sort==='title')return a.title.localeCompare(b.title);return b.created-a.created});
+  return arr;
+ }
+ function card(g,done=false){
+  const n=daysTo(g.deadline);let deadlineTag='';
+  if(g.deadline&&!done){if(n<0)deadlineTag=`<span class="tag overdue">${Math.abs(n)}d overdue</span>`;else if(n<=7)deadlineTag=`<span class="tag soon">${n===0?'Due today':n===1?'Due tomorrow':`Due in ${n} days`}</span>`}
+  return `<article class="goal ${done?'done':''}" data-id="${g.id}">
+   <input class="check" type="checkbox" aria-label="${done?'Mark incomplete':'Mark completed'}: ${esc(g.title)}" data-complete="${g.id}" ${done?'checked':''}>
+   <div class="goal-main"><div class="goal-title">${esc(g.title)}</div>${g.note?`<div class="goal-note">${esc(g.note)}</div>`:''}
+   <div class="meta"><span class="tag">${esc(g.category)}</span><span class="tag ${'p-'+g.priority}">${priorityLabel(g.priority)}</span>${!done&&g.status==='progress'?'<span class="tag">In progress</span>':''}${deadlineTag}</div>
+   <div class="date">⌁ ${dateLabel(g.deadline)}${done&&g.completedAt?' · Completed '+dateLabel(g.completedAt):''}</div></div>
+   <div class="goal-actions"><button class="mini-btn" data-edit="${g.id}" aria-label="Edit wish">✎</button><button class="mini-btn" data-delete="${g.id}" aria-label="Delete wish">⋯</button></div>
+  </article>`;
+ }
+ function render(){
+  refreshSelects();
+  const total=state.goals.length,done=state.goals.filter(g=>g.status==='done').length,active=total-done,pct=total?Math.round(done/total*100):0;
+  $('totalCount').textContent=total;$('activeCount').textContent=active;$('doneCount').textContent=done;$('progressText').textContent=pct+'% complete';$('progressFill').style.width=pct+'%';
+  $('listHeading').textContent=currentView==='upcoming'?'Coming up in 30 days':currentView==='all'?'All your wishes':'Your wishes';
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===currentView));
+  const arr=filteredGoals(false);$('goalList').innerHTML=arr.map(g=>card(g)).join('');
+  if(!arr.length){let message=currentStatus==='overdue'?'Nothing overdue. Keep that lovely momentum!':currentStatus==='no-date'?'All caught up on dated wishes.':currentView==='upcoming'?'No deadlines in the next 30 days. Room to breathe!':'No wishes here yet — add a little dream to get started.';$('goalList').innerHTML=`<div class="empty"><div class="flower">🌷</div><strong>${currentStatus==='overdue'?'You’re all caught up!':'A little space for a new dream'}</strong>${esc(message)}</div>`}
+  const finished=filteredGoals(true);$('completedLabel').textContent=`${finished.length} · ${completedOpen?'Hide ▴':'Show ▾'}`;$('completedList').classList.toggle('open',completedOpen);$('completedList').innerHTML=finished.map(g=>card(g,true)).join('')||(completedOpen?'<div class="empty"><div class="flower">♡</div>No completed wishes just yet.</div>':'');
+  document.querySelectorAll('.chip').forEach(b=>b.classList.toggle('active',b.dataset.status===currentStatus));
+ }
+ function showToast(s){const t=$('toast');t.textContent=s;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2300)}
+ function openModal(g=null){$('goalForm').reset();$('goalId').value=g?g.id:'';$('modalTitle').textContent=g?'Edit your wish ✿':'Add a little wish ✿';refreshSelects();if(g){$('goalTitle').value=g.title;$('goalNote').value=g.note||'';$('goalCategory').value=g.category;$('goalPriority').value=g.priority;$('goalDeadline').value=g.deadline||'';$('goalStatus').value=g.status}else{$('goalPriority').value='medium';$('goalStatus').value='open'}$('modalBackdrop').classList.add('show');setTimeout(()=>$('goalTitle').focus(),100)}
+ function closeModal(){$('modalBackdrop').classList.remove('show')}
+ function getGoal(id){return state.goals.find(g=>g.id===id)}
+ $('addBtn').addEventListener('click',()=>openModal());$('closeModal').addEventListener('click',closeModal);$('cancelModal').addEventListener('click',closeModal);
+ $('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))closeModal()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+ $('goalForm').addEventListener('submit',e=>{e.preventDefault();const id=$('goalId').value,old=getGoal(id),status=$('goalStatus').value;const g={id:id||String(Date.now())+'-'+Math.random().toString(36).slice(2,7),title:$('goalTitle').value.trim(),note:$('goalNote').value.trim(),category:$('goalCategory').value||state.categories[0],priority:$('goalPriority').value,deadline:$('goalDeadline').value,status,created:old?.created||Date.now(),completedAt:status==='done'?(old?.status==='done'?old.completedAt:new Date().toISOString().slice(0,10)):''};if(!g.title)return;if(old)state.goals=state.goals.map(x=>x.id===id?g:x);else state.goals.push(g);save();closeModal();render();showToast(old?'Wish updated ♡':'Wish saved ♡')});
+ document.addEventListener('change',e=>{const id=e.target.dataset.complete;if(!id)return;const g=getGoal(id);if(!g)return;if(e.target.checked){g.status='done';g.completedAt=new Date().toISOString().slice(0,10);completedOpen=true;showToast('One little dream achieved! ✿')}else{g.status='open';g.completedAt='';showToast('Moved back to your wishes')}save();render()});
+ document.addEventListener('click',e=>{const edit=e.target.closest('[data-edit]');if(edit){const g=getGoal(edit.dataset.edit);if(g)openModal(g);return}const del=e.target.closest('[data-delete]');if(del){const g=getGoal(del.dataset.delete);if(g&&confirm(`Delete “${g.title}”? This cannot be undone.`)){state.goals=state.goals.filter(x=>x.id!==g.id);save();render();showToast('Wish deleted')}return}const rem=e.target.closest('[data-remove-cat]');if(rem){const cat=rem.dataset.removeCat;if(state.categories.length<=1){showToast('Keep at least one category ♡');return}if(confirm(`Remove category “${cat}”? Existing wishes will move to “${state.categories.find(c=>c!==cat)}”.`)){const replacement=state.categories.find(c=>c!==cat);state.goals.forEach(g=>{if(g.category===cat)g.category=replacement});state.categories=state.categories.filter(c=>c!==cat);save();render()}return}});
+ document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{currentStatus=b.dataset.status;currentView='all';render()}));
+ ['searchInput','categoryFilter','priorityFilter','sortSelect'].forEach(id=>$(id).addEventListener(id==='searchInput'?'input':'change',render));
+ $('completedToggle').addEventListener('click',()=>{completedOpen=!completedOpen;render()});
+ document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>{currentView=b.dataset.view;currentStatus='active';render()}));
+ $('settingsBtn').addEventListener('click',()=>{$('settingsPanel').classList.toggle('show');if($('settingsPanel').classList.contains('show'))$('settingsPanel').scrollIntoView({behavior:'smooth',block:'nearest'})});
+ $('addCategoryBtn').addEventListener('click',()=>{const inp=$('newCategory'),v=inp.value.trim();if(!v)return;if(state.categories.some(c=>c.toLowerCase()===v.toLowerCase())){showToast('That category already exists');return}if(v.length>32){showToast('Keep category names under 33 characters');return}state.categories.push(v);inp.value='';save();render();showToast('New category added ♡')});
+ $('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='little-wishes-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(url);showToast('Backup exported')});
+ $('importInput').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(!Array.isArray(data.goals)||!Array.isArray(data.categories))throw new Error('Invalid backup');if(!confirm('Importing replaces the wishes currently saved in this browser. Export a backup first if you need one. Continue?'))return;state={categories:[...new Set(data.categories.filter(x=>typeof x==='string'&&x.trim()))],goals:data.goals.filter(g=>g&&typeof g.title==='string'&&g.id).map(g=>({...g,category:data.categories.includes(g.category)?g.category:(data.categories[0]||'Personal growth')}))};if(!state.categories.length)state.categories=[...DEFAULT_CATS];save();render();showToast('Backup imported ♡')}catch(err){showToast('That backup file could not be read')}finally{e.target.value=''}});
+ if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+ render();
+})();
+</script>
+</body>
+</html>
